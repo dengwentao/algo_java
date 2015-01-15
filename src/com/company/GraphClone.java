@@ -26,7 +26,7 @@ import java.util.*;
 
  */
 
-class Solution {
+class SolutionCG {
     class UndirectedGraphNode {
         int label;
         List<UndirectedGraphNode> neighbors;
