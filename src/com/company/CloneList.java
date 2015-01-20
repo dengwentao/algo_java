@@ -13,7 +13,7 @@ class RandomListNode {
      RandomListNode(int x) { this.label = x; }
 };
 
-class Solution {
+class SolutionCL {
     public RandomListNode copyRandomList(RandomListNode head) {
         if(head == null)
             return null;
@@ -81,7 +81,7 @@ class Solution {
 public class CloneList {
     public static void main(String[] args) {
         // write your code here
-        Solution sol = new Solution();
+        SolutionCL sol = new SolutionCL();
         sol.test();
     }
 }
