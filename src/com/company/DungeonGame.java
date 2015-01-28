@@ -15,7 +15,7 @@ package com.company;
   if(D[i][j] - H(i, j) > 0) return 0;
   else return H(i, j) - D[i][j] + 1;
     */
-class Solution {
+class SolutionGame {
 
     int[][] M;
     int[][] D;
@@ -58,7 +58,7 @@ class Solution {
 public class DungeonGame {
     public static void main(String[] args) {
         // write your code here
-        Solution sol = new Solution();
+        SolutionGame sol = new SolutionGame();
         sol.test();
     }
 }
