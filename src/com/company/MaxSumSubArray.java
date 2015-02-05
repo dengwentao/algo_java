@@ -5,7 +5,7 @@ package com.company;
  * Input a circular list, and output the max sum.
  */
 
-class Solution {
+class SolutionMaxSum {
     public int maxSubArray(int[] A) {
         int res = Integer.MIN_VALUE;
         int sum = 0;
