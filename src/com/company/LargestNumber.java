@@ -10,7 +10,7 @@ import java.util.*;
  Note: The result may be very large, so you need to return a string instead of an integer.
  */
 
-class Solution {
+class SolutionLargestNumber {
 
     class NumString implements Comparable<NumString> {
         String str;
@@ -41,7 +41,7 @@ class Solution {
         if(all0)
             return "0";
 
-        ArrayList<NumString> arr = new ArrayList<Solution.NumString>(num.length);
+        ArrayList<NumString> arr = new ArrayList<SolutionLargestNumber.NumString>(num.length);
         for(int i : num) {
             arr.add(new NumString(i));
         }
@@ -64,7 +64,7 @@ class Solution {
 public class LargestNumber {
     public static void main(String[] args) {
         // write your code here
-        Solution sol = new Solution();
+        SolutionLargestNumber sol = new SolutionLargestNumber();
         sol.test();
     }
 }
