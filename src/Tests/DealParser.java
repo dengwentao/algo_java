@@ -1,4 +1,4 @@
-package com.company;
+package Tests;
 import java.util.*;
 import java.io.*;
 

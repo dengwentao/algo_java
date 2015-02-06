@@ -1,4 +1,4 @@
-package com.company;
+package Tests;
 
 /**
  * Created by wedeng on 2/4/15.

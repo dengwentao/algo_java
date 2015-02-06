@@ -1,4 +1,4 @@
-package com.company;
+package Tests;
 import java.util.*;
 /**
  * Created by wedeng on 2/2/15.
