@@ -44,7 +44,7 @@ class SolutionMaxSum {
 public class MaxSumSubArray {
     public static void main(String[] args) {
         // write your code here
-        Solution sol = new Solution();
+        SolutionMaxSum sol = new SolutionMaxSum();
         sol.test();
     }
 }

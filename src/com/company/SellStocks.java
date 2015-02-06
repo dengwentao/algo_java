@@ -73,7 +73,7 @@ class Solution_1 {
 
 public class SellStocks {
     public static void main(String[] args) {
-        Solution sol = new Solution();
+        Solution_1 sol = new Solution_1();
         sol.test();
     }
 }

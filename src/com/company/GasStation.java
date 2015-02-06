@@ -11,7 +11,7 @@ import java.util.*;
  Return any one of the starting gas station's index if you can travel around the circuit once starting from there, otherwise return -1.
  */
 
-class Solution {
+class SolutionGas {
     public int canCompleteCircuit(int[] gas, int[] cost) {
         if(gas.length==0 || gas.length != cost.length)
             return -1;
@@ -46,7 +46,7 @@ class Solution {
 public class GasStation {
     public static void main(String[] args) {
         // write your code here
-        Solution sol = new Solution();
+        SolutionGas sol = new SolutionGas();
         sol.test();
     }
 }

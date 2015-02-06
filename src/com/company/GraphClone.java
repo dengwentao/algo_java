@@ -99,7 +99,7 @@ class SolutionCG {
 public class GraphClone {
     public static void main(String[] args) {
         // write your code here
-        Solution sol = new Solution();
+        SolutionCG sol = new SolutionCG();
         sol.test();
     }
 };

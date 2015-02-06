@@ -69,3 +69,48 @@ public class BSTIterator {
     }
 }
 
+
+//Post order traversal of bi-tree
+class Solution {
+    Stack<TreeNode> s1 = new Stack<TreeNode>();
+    Stack<TreeNode> s2 = new Stack<TreeNode>();
+
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> res = new LinkedList<Integer>();
+        if(root!=null)
+            s1.push(root);
+        while(!s1.empty()) {
+            root = s1.pop();
+            s2.push(root);
+            if(root.left!=null)
+                s1.push(root.left);
+            if(root.right!=null)
+                s1.push(root.right);
+        }
+        while(!s2.empty())
+            res.add(s2.pop().val);
+        return res;
+    }
+
+    static TreeNode createBST() {
+        TreeNode root = new TreeNode(5);
+        root.left = new TreeNode(3);
+        root.right = new TreeNode(8);
+        root.left.left = new TreeNode(0);
+        root.left.right = new TreeNode(4);
+        root.right.left = new TreeNode(6);
+        root.right.left.right = new TreeNode(7);
+        root.right.right = new TreeNode(9);
+
+        return root;
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = createBST();
+        Solution sol = new Solution();
+        List<Integer> res = sol.postorderTraversal(root);
+        for(int i : res) {
+            System.out.println(i);
+        }
+    }
+}
