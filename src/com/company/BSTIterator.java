@@ -71,7 +71,7 @@ public class BSTIterator {
 
 
 //Post order traversal of bi-tree
-class Solution {
+class SolutionPostOrder {
     Stack<TreeNode> s1 = new Stack<TreeNode>();
     Stack<TreeNode> s2 = new Stack<TreeNode>();
 
@@ -107,7 +107,7 @@ class Solution {
 
     public static void main(String[] args) {
         TreeNode root = createBST();
-        Solution sol = new Solution();
+        SolutionPostOrder sol = new SolutionPostOrder();
         List<Integer> res = sol.postorderTraversal(root);
         for(int i : res) {
             System.out.println(i);
