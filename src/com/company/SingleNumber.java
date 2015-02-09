@@ -9,7 +9,7 @@ import java.util.*;
  Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
  */
 
-class Solution {
+class SolutionSingle {
     public int singleNumber(int[] A) {
         if(A.length<4)
             return 0;
@@ -35,7 +35,7 @@ class Solution {
 
 public class SingleNumber {
     public static void main(String[] args) {
-        Solution sol = new Solution();
+        SolutionSingle sol = new SolutionSingle();
         sol.test();
     }
 }
