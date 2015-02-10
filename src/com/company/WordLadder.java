@@ -23,7 +23,7 @@ import java.util.*;
  All words contain only lowercase alphabetic characters.
  */
 
-class Solution {
+class SolutionWordLadder {
     class Entry {
         ArrayList<String> path;
 
@@ -150,7 +150,7 @@ class Solution {
 
 public class WordLadder {
     public static void main(String[] args) {
-        Solution sol = new Solution();
+        SolutionWordLadder sol = new SolutionWordLadder();
         sol.test();
     }
 }
