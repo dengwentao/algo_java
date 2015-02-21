@@ -26,7 +26,7 @@ import java.util.*;
  * }
  */
 
-class Solution {
+class SolutionUniqBST {
 
     List<TreeNode>[][] map;
 
@@ -87,7 +87,7 @@ class Solution {
 
 public class UniqueBST {
     public static void main(String[] args) {
-        Solution sol = new Solution();
+        SolutionUniqBST sol = new SolutionUniqBST();
         sol.test();
     }
 }
