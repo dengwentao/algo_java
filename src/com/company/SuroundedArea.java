@@ -6,8 +6,8 @@ package com.company;
 
  A region is captured by flipping all 'O's into 'X's in that surrounded region.
  */
-
-class Solution {
+//TODO: not passed yet.
+class SuroundedAreaSolution {
     char[][] board;
 
     public void solve(char[][] board) {
@@ -73,7 +73,7 @@ class Solution {
 
 public class SuroundedArea {
     public static void main(String[] args) {
-        Solution sol = new Solution();
+        SuroundedAreaSolution sol = new SuroundedAreaSolution();
         sol.test();
     }
 }
