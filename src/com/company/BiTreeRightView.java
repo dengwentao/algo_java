@@ -10,7 +10,7 @@ import java.util.Queue;
 */
 
 
-class Solution {
+class BiTreeSolution {
     public class TreeNode {
         int val;
         TreeNode left;
@@ -77,7 +77,7 @@ class Solution {
 
 public class BiTreeRightView {
     public static void main(String[] args) {
-        Solution sol = new Solution();
+        BiTreeSolution sol = new BiTreeSolution();
         sol.test();
     }
 
