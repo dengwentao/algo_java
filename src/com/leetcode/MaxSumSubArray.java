@@ -7,7 +7,7 @@ package com.leetcode;
 
 class SolutionMaxSum {
     public int maxSubArray(int[] A) {
-        int res = Integer.MIN_VALUE;
+        int max = Integer.MIN_VALUE;
         int sum = 0;
         for(int i=0; i<A.length; i++)
         {
@@ -16,10 +16,43 @@ class SolutionMaxSum {
             else
                 sum += A[i];
 
-            if(sum > res)
-                res = sum;
+            if(sum > max)
+                max = sum;
         }
-        return res;
+        return max;
+    }
+
+    public int maxSubArrayV2(int[] A) {
+        int max = Integer.MIN_VALUE;
+        int sum = 0;
+        for(int i=0; i<A.length; i++) {
+            sum += A[i];
+            if(sum < 0)
+                sum = 0;
+            else {
+                if(max < sum)
+                    max = sum;
+            }
+        }
+        return max;
+    }
+
+    // should return negative if all neg.
+    public int maxSubArrayV3(int[] A) {
+        int max = Integer.MIN_VALUE;
+        int sum = 0;
+        for(int i=0; i<A.length; i++) {
+            sum += A[i];
+            if(sum < 0) {
+                sum = 0;
+                max = Math.max(A[i], max);
+            }
+            else {
+                if(max < sum)
+                    max = sum;
+            }
+        }
+        return max;
     }
 
     public int maxSubCircularArray(int[] A) {
@@ -37,7 +70,13 @@ class SolutionMaxSum {
     public void test()
     {
         int[] a = {1,-2,3,5,-3,2};//{-2, 1, -3, 4, -1, 2, 1, -5, 4};
+        System.out.println(maxSubArray(a));
+        System.out.println(maxSubArrayV2(a));
+        System.out.println(maxSubArrayV3(a));
         System.out.println(maxSubCircularArray(a));
+
+        int[] aa = {-4,-2,-3,-5,-3,-2};
+        System.out.println(maxSubArrayV3(aa));
     }
 };
 
