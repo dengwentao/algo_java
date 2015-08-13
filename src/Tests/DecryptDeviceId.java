@@ -70,7 +70,7 @@ public final class DecryptDeviceId {
                 }
             }
         } catch (IOException e) {
-            // This exception can be swallowed.
+            throw new TanxDeviceIdDecryptException("IOException when verifying CRC.");
         }
 
         return sbDevId.toString();
