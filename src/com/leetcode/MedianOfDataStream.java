@@ -34,37 +34,16 @@ public class MedianOfDataStream {
 
         // Adds a number into the data structure.
         public void addNum(int num) {
-            if(size == 0)
-                pqMin.offer(num);
-            else if(size == 1) {
-                int min = pqMin.peek(); // when size is odd, always keep the extra one in pqMin.
-                if(min >= num)
-                    pqMax.offer(num);
-                else {
-                    pqMin.offer(num);
-                    pqMax.offer(pqMin.poll());
-                }
-            }
-            else {
-                int min = pqMin.peek();
-                int max = pqMax.peek(); // note that min >= max
+            pqMin.offer(num);
+            if(size != 0) {
                 if((size % 2) == 0) { // even size
-                    if (num >= min)
-                        pqMin.offer(num);
-                    else {
-                        pqMax.offer(num);
+                    if (pqMin.peek() < pqMax.peek()) {
                         pqMin.offer(pqMax.poll());
-                    }
-                }
-                else { // odd size, pqMin.size == pqMax.size+1
-                    if(num > min) {
-                        pqMin.offer(num);
                         pqMax.offer(pqMin.poll());
                     }
-                    else {
-                        pqMax.offer(num);
-                    }
                 }
+                else // odd size, pqMin.size == pqMax.size+1
+                    pqMax.offer(pqMin.poll());
             }
 
             size++;
@@ -88,7 +67,7 @@ public class MedianOfDataStream {
         mf.addNum(2);
         System.out.println(mf.findMedian());
         mf.addNum(3);
-        mf.addNum(-1);
+        mf.addNum(2);
         System.out.println(mf.findMedian());
     }
 }
