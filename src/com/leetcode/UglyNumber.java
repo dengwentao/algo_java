@@ -129,7 +129,7 @@ public class UglyNumber {
                     i2++;
                     u2 = ugly.get(i2) * 2;
                 }
-                if (u == u3) {
+                if (u == u3) { // not else if, because 3 sequences may overlap.
                     i3++;
                     u3 = ugly.get(i3) * 3;
                 }
@@ -148,7 +148,7 @@ public class UglyNumber {
 
         public void test() {
             //System.out.println(nthUglyNumber(0));
-            System.out.println(nthUglyNumber(1));
+            System.out.println(nthUglyNumber(10));
             //System.out.println(nthUglyNumber(13));
             //System.out.println(nthUglyNumber(130));
 
@@ -162,7 +162,7 @@ public class UglyNumber {
         }
     }
 
-        public static void main(String args[]) {
+    public static void main(String args[]) {
         Solution sol = new Solution();
         sol.test();
     }
