@@ -4,14 +4,15 @@ package Challenges;
  * Created by wentaod on 12/28/15.
  */
 public class RemoveBSTNode {
-    static class TreeNode {
+    static private class TreeNode {
         int val;
         TreeNode left;
         TreeNode right;
         TreeNode(int x) { val = x; }
     }
 
-    static TreeNode remove(TreeNode root, int x) {
+    // remove a node whose value is x from the given tree
+    static public TreeNode remove(TreeNode root, int x) {
         if(root == null)
             return null;
         if(root.val < x)
@@ -34,7 +35,30 @@ public class RemoveBSTNode {
         return root;
     }
 
-    static TreeNode createBST() {
+    // find the node whose value is least larger than x from the given tree
+    // return MIN or MAX if none.
+    static public int nextBiggerNode(TreeNode root, int x) {
+        return nextBiggerNode(root, x, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
+    static private int nextBiggerNode(TreeNode root, int x, int min, int max) {
+        if(root==null)
+            return Integer.MIN_VALUE;
+        if(root.val < x)
+            return nextBiggerNode(root.right, x, root.val, max);
+        else if(root.val > x)
+            return nextBiggerNode(root.left, x, min, root.val);
+        else {
+            if(root.right == null)
+                return max;
+            TreeNode node = root.right;
+            while(node.left != null)
+                node = node.left;
+            return node.val;
+        }
+    }
+
+    static public TreeNode createBST() {
         TreeNode root = new TreeNode(5);
         root.left = new TreeNode(3);
         root.right = new TreeNode(8);
@@ -47,7 +71,7 @@ public class RemoveBSTNode {
         return root;
     }
 
-    static void print(TreeNode node) {
+    static public void print(TreeNode node) {
         if(node == null)
             return;
         print(node.left);
@@ -60,5 +84,6 @@ public class RemoveBSTNode {
         root = remove(root, 5);
         System.out.println("New root is: " + root.val);
         print(root);
+        System.out.println("Next bigger is: " + nextBiggerNode(root, 4));
     }
 }
