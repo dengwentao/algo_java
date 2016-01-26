@@ -16,7 +16,7 @@ public class InsertAnInterval {
             start = 0;
             end = 0;
         }
-        
+
         Interval(int s, int e) {
             start = s;
             end = e;
@@ -25,39 +25,21 @@ public class InsertAnInterval {
 
     public class Solution {
         public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
-            if(intervals.isEmpty()) {
-                intervals.add(newInterval);
-                return intervals;
-            }
-
-            int index = findInsertionIndex(intervals, newInterval, 0, intervals.size()-1);
-
+            boolean inserted = false;
             List<Interval> result = new ArrayList<>();
+
             for(int i=0; i<intervals.size(); i++) {
-                if(i ==  index)
+                if(!inserted && i<intervals.size() && intervals.get(i).start > newInterval.start) {
                     appendInterval(result, newInterval);
+                    inserted = true;
+                }
                 appendInterval(result, intervals.get(i));
             }
 
-            if(index == intervals.size())
+            if(!inserted)
                 appendInterval(result, newInterval);
 
             return result;
-        }
-
-        // do a bi-search to find the index of the new interval where it should be inserted into the ordered list
-        int findInsertionIndex(List<Interval> intervals, Interval newInterval, int start, int end) {
-            if(start ==  end) {
-                return newInterval.start <= intervals.get(start).start ? start : start+1;
-            }
-            int mid = (end-start)/2 + start;
-            int midStart = intervals.get(mid).start;
-            if(newInterval.start > midStart)
-                return findInsertionIndex(intervals, newInterval, mid+1, end);
-            else if(newInterval.start < midStart)
-                return findInsertionIndex(intervals, newInterval, start, mid);
-            else
-                return mid;
         }
 
         // append new interval into an ordered exisiting intervals list, combine when necessary.
