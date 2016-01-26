@@ -51,6 +51,12 @@ public class LongestCommonSequence {
         public int length() {
             return length;
         }
+
+        public void print() {
+            for(String sb : lcs){
+                System.out.println(sb);
+            }
+        }
     }
 
     static Lcs LCS(String s1, String s2) {
@@ -88,19 +94,10 @@ public class LongestCommonSequence {
         return dp.get(x.length);
     }
 
-    static void print(Set<String> lsb) {
-        for(String sb : lsb)
-            System.out.print(sb.toString()+",  ");
-        System.out.println();
-    }
-
     public static void main(String args[]) {
         String s1 = "abcxyz1234";
         String s2 = "123xyz4abc";
         Lcs lcs = LCS(s1, s2);
-        System.out.println("-------");
-        for(String sb : lcs.lcs){
-            System.out.println(sb.toString());
-        }
+        lcs.print();
     }
 }
