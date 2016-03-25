@@ -239,8 +239,128 @@ public class SellStock {
         }
     }
 
+    static public class SolutionIV {
+        /*
+        Say you have an array for which the ith element is the price of a given stock on day i.
+        Design an algorithm to find the maximum profit. You may complete at most k transactions.
+        */
+
+        public int maxProfit(int k, int[] prices) {
+            if(k==0 || prices.length<2)
+                return 0;
+
+            int L[] = new int[prices.length+1];
+            int G_old[] = new int[prices.length+1];
+            for(int j=0; j<k; j++) {
+                int G[] = new int[prices.length+1];
+                for (int i = 2; i <= prices.length; i++) {
+                    int last = prices[i - 1] - prices[i - 2];
+                    L[i] = Math.max(L[i - 1] + last, G_old[i - 2] + Math.max(0, last));
+                    if (L[i] < 0)
+                        L[i] = 0;
+                    G[i] = Math.max(L[i], G[i - 1]);
+                }
+                G_old = G;
+            }
+
+            return G_old[prices.length];
+        }
+
+        public void test() {
+            int k = 1;
+            int[] prices = {2, 5, 1, 8, 3, 1, 7, 3, 9, 2, 6};
+            System.out.println(maxProfit(k, prices));
+        }
+    }
+
+    static public class SolutionV {
+        /*Say you have an array for which the ith element is the price of a given stock on day i.
+        Design an algorithm to find the maximum profit. You may complete as many transactions as you like (ie, buy one and sell one share of the stock multiple times) with the following restrictions:
+        You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
+        After you sell your stock, you cannot buy stock on next day. (ie, cooldown 1 day)
+        */
+
+        int[] prices;
+        Integer[] dpF;
+        Integer[] dpG;
+
+        public int maxProfit(int[] prices) {
+            if(prices==null || prices.length<2)
+                return 0;
+            this.prices = prices;
+            this.dpF = new Integer[prices.length+1];
+            this.dpG = new Integer[prices.length+1];
+            return g(prices.length-1);
+        }
+
+        // max profit when last transaction ends at day x with 1 day cool down.
+        int f(int x) {
+            if(x<1)
+                return 0;
+            if(dpF[x] != null)
+                return dpF[x];
+
+            dpF[x] = 0;
+            for(int i=0; i<x; i++) {
+                if(prices[x] > prices[i]) {
+                    int profit = prices[x] - prices[i] + g(i - 2);
+                    if (dpF[x] < profit)
+                        dpF[x] = profit;
+                }
+            }
+
+            return dpF[x];
+        }
+
+        // max profit when last transaction ends at day x with 1 day cool down.
+        int g(int x) {
+            if(x<1)
+                return 0;
+            if(dpG[x] != null)
+                return dpG[x];
+
+            dpG[x] = Math.max(g(x - 1), f(x));
+            return dpG[x];
+        }
+
+        public void test() {
+            int[] prices = {2, 5, 1, 8, 3, 1, 7, 3, 9, 2, 6};
+            System.out.println(maxProfit(prices));
+        }
+    }
+
+    static public class SolutionV_2 {
+        public int maxProfit(int[] prices) {
+            if(prices==null || prices.length<2)
+                return 0;
+            int[] dpG = new int[prices.length+1]; // max profit when last transaction ends at day x with 1 day cool down.
+
+            int max = 0;
+            for(int x=1; x<prices.length; x++) {
+                int maxF = 0;
+                for(int i=0; i<x; i++) {
+                    if(prices[x] > prices[i]) {
+                        int profit = prices[x] - prices[i] + (i>=2 ? dpG[i-2] : 0);
+                        if(profit > maxF)
+                            maxF = profit;
+                    }
+                }
+                dpG[x] = Math.max(dpG[x-1], maxF);
+                if(max < dpG[x])
+                    max = dpG[x];
+            }
+
+            return max;
+        }
+
+        public void test() {
+            int[] prices = {2, 5, 1, 8, 3, 1, 7, 3, 9, 2, 6};
+            System.out.println(maxProfit(prices));
+        }
+    }
+
     static public void main(String args[]) {
-        SolutionIII_2 sol = new SolutionIII_2();
+        SolutionV_2 sol = new SolutionV_2();
         sol.test();
     }
 }
