@@ -93,7 +93,7 @@ public class BinaryIndexedTree {
      * Floating Median
      * Given a list of numbers, there's a fixed size sliding window, output median in this window while it slides through the array.
      */
-    static public void main(String args[]) {
+    static public void mainII(String args[]) {
         int[] array = {3, -4, 6, 0, 0, 0, 1, 0, -6, 8, 0, 2, -1, 3, 9, 7, 0};
         int win = 3; // window size is 3
 
@@ -126,4 +126,65 @@ public class BinaryIndexedTree {
         }
     }
 
+
+    static class BIT2D {
+        int[][] matrix;
+        int height;
+        int width;
+
+        public BIT2D(int width, int height) {
+            matrix = new int[height][width];
+            this.height = height;
+            this.width = width;
+        }
+
+        // add diff to cell matrix[y][x].
+        public void add(int x, int y, int diff) {
+            while(x <= width) {
+                addY(x, y, diff);
+                x += (x & -x);
+            }
+        }
+
+        void addY(int x, int y, int diff) {
+            while(y <= height) {
+                matrix[y][x] += diff;
+                y += (y & -y);
+            }
+        }
+
+        // get sum of submatrix [0, 0] to [y, x]
+        public int sum(int x, int y) {
+            int sum = 0;
+            while(x > 0) {
+                sum += sumY(x, y);
+                x -= x & -x;
+            }
+            return sum;
+        }
+
+        int sumY(int x, int y) {
+            int sum = 0;
+            while(y > 0) {
+                sum += matrix[y][x];
+                y -= y & -y;
+            }
+            return sum;
+        }
+    }
+
+    static public void main(String args[]) {
+        int array[][] = {
+                {1, 3, 6, 1, 2, 8},
+                {6, 9, 6, 3, 2, 5},
+                {7, 1, 2, 0, 0, 4},
+                {4, 7, 0, 0, 1, 5}};
+        BIT2D bit = new BIT2D(array[0].length+1, array.length+1);
+        for(int y=0; y<array.length; y++)
+            for(int x=0; x<array[0].length; x++)
+                bit.add(x+1, y+1, array[y][x]);
+        System.out.println(bit.sum(3, 4));
+        bit.add(2, 3, -4);
+        System.out.println(bit.sum(3, 4));
+    }
 }
