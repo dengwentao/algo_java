@@ -1,7 +1,6 @@
 package Challenges;
 
-import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * Dijkstra Algorithm
@@ -10,8 +9,23 @@ import java.util.PriorityQueue;
  */
 public class DijkstraAlgorithm {
 
+    // search input array to find the min value index
+    static int findShortestIndex(int dist[], Set<Integer> visited) {
+        int minIndex = -1;
+        int min = Integer.MAX_VALUE;
+        for(int i=0; i<dist.length; i++) {
+            if(visited.contains(i))
+                continue;
+            if(min > dist[i]) {
+                min = dist[i];
+                minIndex = i;
+            }
+        }
+        return minIndex;
+    }
+
     static public void main(String args[]) {
-        final int F = Integer.MAX_VALUE / 10;
+        final int F = Integer.MAX_VALUE;
         int graph[][] = {
                 {0,   7,    3,  1,  F,  F},
                 {F,   0,    F,  F,  1,  F},
@@ -20,28 +34,18 @@ public class DijkstraAlgorithm {
                 {F,   F,    1,  F,  0,  4},
                 {F,   F,    F,  F,  F,  0}};
         final int dist[] = {0, F, F, F, F, F};
+        Set<Integer> visited = new HashSet<>();
 
-        PriorityQueue<Integer> queue = new PriorityQueue<>(graph.length, new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return dist[o1] - dist[02];
-            }
-        });
-
-        for(int i=0; i<graph.length; i++)
-            queue.add(i);
-
-        while(!queue.isEmpty()) {
-            int index = queue.poll();
+        while(visited.size() < graph.length) {
+            int index = findShortestIndex(dist, visited);
+            visited.add(index);
+            System.out.println("-----" + index + "-----");
             for(int i=0; i<graph.length; i++) {
-                if (i == index || graph[index][i] == F)
+                if (visited.contains(i) || graph[index][i] == F)
                     continue;
                 int dis = graph[index][i] + dist[index];
-                if (dis < dist[i]) {
+                if (dis < dist[i])
                     dist[i] = dis;
-                    queue.remove(i); // remove and then push into the queue so that it can be ordered to new position
-                    queue.offer(i);
-                }
             }
         }
 
