@@ -3,7 +3,7 @@ package Challenges;
 /**
  * Created by wentaod on 12/28/15.
  */
-public class RemoveBSTNode {
+public class BSTNodeRemoval {
     static private class TreeNode {
         int val;
         TreeNode left;
