@@ -5,17 +5,23 @@ import java.util.*;
 
 public class Main {
 
-    public static void main(String[] args) {
-        // index in BITree[] is 1 more than the index in arr[]
-        int index = 8;
-        index = index + 1;
+    static String firstRepeatedWord(String s) {
+        if (s == null || s.length() < 2)
+            return ""; // not found.
 
-        // Traverse all ancestors and add 'val'
-        while (index <= 12)
-        {
-            System.out.println(index);
-            // Update index to that of parent
-            index += index & (-index);
+        Set<String> set = new HashSet<>();
+        for (String part : s.split(" |\\t|:|;|-|\\.")) {
+            if (part.length() != 0) {
+                if (set.contains(part))
+                    return part;
+                set.add(part);
+            }
         }
+
+        return ""; // not found.
+    }
+
+    public static void main(String[] args) {
+        System.out.println(firstRepeatedWord("ee..ee"));
     }
 }

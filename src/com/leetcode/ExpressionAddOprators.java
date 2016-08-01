@@ -14,128 +14,131 @@ import java.util.*;
  "3456237490", 9191 -> []
  */
 public class ExpressionAddOprators {
-    // Wrong solution because it cannot handle - well.
-    static public class SolutionII {
+    static public class Solution2 {
 
-        class Pair {
-            String exp;
-            int target;
-
-            public Pair(String exp, int target) {
-                this.exp = exp;
-                this.target = target;
-            }
-
-            public boolean equals(Pair p) {
-                return exp.equals(p.exp) && target == p.target;
-            }
-
-            public int hashCode() {
-                return (exp+':'+target).hashCode();
-            }
-        }
-
-        // Memoization cache. If an entry has empty value, it means no solution in this path.
-        HashMap<Pair, List<String>> mem = new HashMap<>();
+        List<String> result;
+        char[] path;
+        char[] digits;
+        int target;
 
         public List<String> addOperators(String num, int target) {
-            if(num == null || num.isEmpty())
-                return new ArrayList<>();
-            return tryOperators(num, target, true);
-        }
+            this.result = new LinkedList<>();
 
-        // canAdd: if then we have * in front, then an expression cannot have + or - inside.
-        private List<String> tryOperators(String num, int target, boolean canAdd) {
-            List<String> results = new ArrayList<>();
+            if (num.length() == 0)
+                return result;
 
-            Pair pair = new Pair(num, target);
-            if (mem.get(pair) != null)
-                return mem.get(pair);
+            this.target = target;
+            this.path = new char[num.length() * 2 - 1]; // to hold one possible solution, for temporary use
+            this.digits = num.toCharArray();
 
-            // add ops after index i. if i points to last number, add no ops.
-            for (int i = 0; i < num.length(); i++) {
-                int part1 = Integer.valueOf(num.substring(0, i + 1));
-                String part2 = num.substring(i+1); // could be empty
-
-                if(part2.isEmpty()) {
-                    if(target == part1)
-                        results.add(num);
-                    break; // no possible solution in this path
-                }
-
-                if(canAdd) {
-                    List<String> resPlus = tryOperators(part2, target - part1, true); // part1 + part2 = target
-                    for (String r : resPlus)
-                        results.add("" + part1 + "+" + r);
-                    List<String> resMinus = tryOperators(part2, part1 - target, true); // part1 - part2 = target
-                    for (String r : resMinus)
-                        results.add("" + part1 + "-" + r);
-                }
-
-                // for multiplication
-                List<String> resMul = null;
-                if(part1 == 0 && target == 0) {
-                    // part2 can be any * combined expressions, e.g., 23 or 2*3
-                    resMul = tryAnyMulOperators(part2);
-                }
-                else if(part1 != 0 && target % part1 == 0) {
-                    resMul = tryOperators(part2, target / part1, false); // part1 * part2 = target
-                }
-
-                if(resMul != null) {
-                    for (String r : resMul)
-                        results.add("" + part1 + "*" + r);
-                }
+            long cur = 0;
+            for (int i = 0; i < digits.length; i++) {
+                cur = cur * 10 + digits[i] - '0'; // calculated result so far for this path
+                path[i] = digits[i]; // digits[i] is taken, so we put it into the path
+                dfs(i + 1, 0, cur, i + 1);
+                if (cur == 0)
+                    break;
             }
 
-            mem.put(pair, results);
-            return results;
+            return result;
         }
 
-        // add * in any places.
-        private List<String> tryAnyMulOperators(String exp) {
-            List<String> results = new LinkedList<>();
-            for(int i=0; i<exp.length(); i++) {
-                if(i == exp.length()-1) {
-                    results.add(exp);
-                    return results;
-                }
-                List<String> resMul = tryAnyMulOperators(exp.substring(i + 1));
-                for(String r : resMul)
-                    results.add(exp.substring(0, i+1) + "*" + r);
+        // DFS, try each position with none/+/-/*
+        // len: length of path already taken
+        // left:
+        // cur:
+        // pos:
+        void dfs(int len, long left, long cur, int pos) {
+            if (pos == digits.length) {
+                if (left + cur == target)
+                    result.add(new String(path, 0, len));
+                return;
             }
-            return results;
+
+            long n = 0;
+            int j = len + 1;
+            for (int i = pos; i < digits.length; i++) {
+                n = n * 10 + digits[i] - '0';
+
+                path[j++] = digits[i]; // no operator
+
+                path[len] = '+'; // operator +
+                dfs(j, left + cur, n, i + 1);
+
+                path[len] = '-'; // operator -
+                dfs(j, left + cur, -n, i + 1);
+
+                path[len] = '*'; // operator *
+                dfs(j, left, cur * n, i + 1);
+
+                if (digits[pos] == '0')
+                    break;
+            }
         }
+
 
         public void test() {
-            for(String exp : addOperators("1234", 6))
+            for(String exp : addOperators("105", 5))
                 System.out.println(exp);
         }
     }
 
     static public class Solution {
-        String num;
+
+        List<String> results;
         int target;
+        long digits[];
 
         public List<String> addOperators(String num, int target) {
-            if(num == null || num.isEmpty())
-                return new ArrayList<String>();
-            this.num = num;
+            if (num == null || num.isEmpty())
+                return new ArrayList<>();
+
+            this.results = new ArrayList<>(num.length() * 2 - 1);
             this.target = target;
-            return tryOperators();
+            this.digits = new long[num.length()];
+            for (int i=0; i<num.length(); i++) {
+                digits[i] = num.charAt(i) - '0';
+            }
+
+            tryOperators(0, 1, 0, 1, new StringBuilder());
+
+            return results;
         }
 
-        private List<String> tryOperators() {
-            return new ArrayList<String>();
+        // DFS: try none/*/+/- after each positions
+        void tryOperators(int index, long prod, long sum, long curNum, StringBuilder path) {
+            if (index == digits.length) {
+                //
+                return;
+            }
+
+            // try all options after each position [index, end)
+            for (int i=index; i<digits.length; i++) { // for loop itself means trying none on each position
+                // try *
+                path.append(digits[i]);
+                prod *= curNum;
+                curNum = digits[i];
+                //tryOperators(i + 1, prod, sum, curNum);
+
+                // try +
+                sum += prod * curNum;
+                curNum = digits[i];
+                prod = 1;
+
+                // try -
+                sum += prod * curNum;
+                curNum = digits[i];
+                prod = -1;
+            }
         }
 
         public void test() {
-            for(String exp : addOperators("1234", 6))
+            for(String exp : addOperators("105", 5))
                 System.out.println(exp);
         }
     }
 
-    static public void main(String args[]) {
+        static public void main(String args[]) {
         Solution sol = new Solution();
         sol.test();
     }

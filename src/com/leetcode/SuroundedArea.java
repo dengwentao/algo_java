@@ -1,53 +1,82 @@
 package com.leetcode;
+import java.util.*;
 
 /**
+ * Surrounded Regions
  * Created by wedeng on 2/16/15.
  * Given a 2D board containing 'X' and 'O', capture all regions surrounded by 'X'.
 
  A region is captured by flipping all 'O's into 'X's in that surrounded region.
  */
-//TODO: not passed yet.
 class SuroundedAreaSolution {
     char[][] board;
+    boolean[][] visited;
 
     public void solve(char[][] board) {
-        if(board.length==0 || board.length==1 || board[0].length==1)
+        if(board.length < 3 || board[0].length < 3)
             return;
 
         this.board = board;
+        this.visited = new boolean[board.length][board[0].length];
 
-        for(int i=0; i<board.length; i+=board.length-1)
-            for(int j=0; j<board[0].length; j++)
-                checkSurrounded(i, j);
+        for (int c = 0; c < board[0].length; c++) {
+            if (board[0][c] == 'O' && !visited[0][c])
+                bfs(0, c);
+            if (board[board.length - 1][c] == 'O' && !visited[board.length - 1][c])
+                bfs(board.length - 1, c);
+        }
+        for (int r = 0; r < board.length; r++) {
+            if (board[r][0] == 'O' && !visited[r][0])
+                bfs(r, 0);
+            if (board[r][board[0].length - 1] == 'O' && !visited[r][board[0].length - 1])
+                bfs(r, board[0].length - 1);
+        }
 
-        for(int j=0; j<board[0].length; j+=board[0].length-1)
-            for(int i=0; i<board.length; i++)
-                checkSurrounded(i, j);
-
-        for(int i=0; i<board.length; i++)
-            for(int j=0; j<board[0].length; j++) {
-                if (board[i][j] == 'O')
-                    board[i][j] = 'X';
-                else if (board[i][j] == '1')
-                    board[i][j] = 'O';
+        for (int r = 0; r < board.length; r++) {
+            for (int c = 0; c < board[0].length; c++) {
+                if (board[r][c] == 'O' && !visited[r][c]) {
+                    board[r][c] = 'X';
+                }
             }
-    }
-
-    void checkSurrounded(int row, int col) {
-        if(row<0 || row>=board.length || col<0 || col>=board[0].length)
-            return;
-        if(board[row][col]=='X')
-            return;
-        else if(board[row][col]=='1')
-            return;
-        else {
-            board[row][col] = '1';
-            checkSurrounded(row-1, col);
-            checkSurrounded(row+1, col);
-            checkSurrounded(row, col-1);
-            checkSurrounded(row, col+1);
         }
     }
+
+    void bfs(int r, int c) {
+
+        class Pair {
+            int r;
+            int c;
+            Pair(int r, int c) {
+                this.r = r;
+                this.c = c;
+            }
+        }
+
+        Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(r, c));
+        visited[r][c] = true;
+
+        while (!q.isEmpty()) {
+            Pair pair = q.poll();
+            if (pair.r - 1 >= 0 && board[pair.r - 1][pair.c] == 'O' && !visited[pair.r - 1][pair.c]) {
+                q.add(new Pair(pair.r - 1, pair.c));
+                visited[pair.r - 1][pair.c] = true;
+            }
+            if (pair.r + 1 < board.length && board[pair.r + 1][pair.c] == 'O' && !visited[pair.r + 1][pair.c]) {
+                q.add(new Pair(pair.r + 1, pair.c));
+                visited[pair.r + 1][pair.c] = true;
+            }
+            if (pair.c - 1 >= 0 && board[pair.r][pair.c - 1] == 'O' && !visited[pair.r][pair.c - 1]) {
+                q.add(new Pair(pair.r, pair.c - 1));
+                visited[pair.r][pair.c - 1] = true;
+            }
+            if (pair.c + 1 < board[0].length && board[pair.r][pair.c + 1] == 'O' && !visited[pair.r][pair.c + 1]) {
+                q.add(new Pair(pair.r, pair.c + 1));
+                visited[pair.r][pair.c + 1] = true;
+            }
+        }
+    }
+
 
     public void test() {
         char[][] board =
