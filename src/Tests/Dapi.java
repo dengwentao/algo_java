@@ -10,7 +10,8 @@ import org.json.simple.parser.JSONParser;
  */
 public class Dapi {
 
-    static String path = "/Users/wentaod/Downloads/xtrader_4K.json"; //"/Users/wentaod/Desktop/xtrader.json";
+    static String inputPath = "/Users/wentaod/Downloads/xtrader_4K.json"; //"/Users/wentaod/Desktop/xtrader.json";
+    static String outputPath = "/Users/wentaod/Desktop/dapi.json";
     static JSONParser parser = new JSONParser();
 
     static Map<String, Integer> demoMapApp;
@@ -43,22 +44,29 @@ public class Dapi {
 
 
     static public void main(String args[]) {
+        BufferedReader inputputFile = null;
+        FileWriter outputFile = null;
+
         int input = 0;
         int output = 0;
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+        try {
+            inputputFile = new BufferedReader(new FileReader(inputPath));
+            outputFile = new FileWriter(outputPath);
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = inputputFile.readLine()) != null) {
                 input++;
                 JSONObject logObj = (JSONObject) parser.parse(line);
                 JSONObject dapiObj = transform((JSONObject) logObj.get("bidderLog"));
 
                 if (dapiObj != null) {
                     output++;
-                    System.out.println(dapiObj);
+                    //System.out.println(dapiObj);
+                    outputFile.write(dapiObj.toJSONString() + "\n");
                 }
 
                 System.out.println("Input: " + input + "\tOutput: " + output);
             }
+            outputFile.close();
         } catch (Exception e) {
             System.out.println(e);
             e.printStackTrace();
@@ -66,8 +74,19 @@ public class Dapi {
     }
 
     static JSONObject transform(JSONObject bidderLog) throws Exception {
-        JSONArray age = (JSONArray) bidderLog.get("age");
-        JSONArray gender = (JSONArray) bidderLog.get("gender");
+        //JSONArray age = (JSONArray) bidderLog.get("age");
+        //JSONArray gender = (JSONArray) bidderLog.get("gender");
+        JSONArray age = null;
+        String ageStr = (String) bidderLog.get("age");
+        if (ageStr != null && !ageStr.isEmpty()) {
+            age = (JSONArray) parser.parse(ageStr);
+        }
+        JSONArray gender = null;
+        String genderStr = (String) bidderLog.get("gender");
+        if (genderStr != null && !genderStr.isEmpty()) {
+            gender = (JSONArray) parser.parse(genderStr);
+        }
+
         if ((age == null || age.isEmpty()) && (gender == null || gender.isEmpty())) {
             return null;
         }
