@@ -10,8 +10,8 @@ import org.json.simple.parser.JSONParser;
  */
 public class Dapi {
 
-    static String inputPath = "/Users/wentaod/Downloads/xtrader_4K.json"; //"/Users/wentaod/Desktop/xtrader.json";
-    static String outputPath = "/Users/wentaod/Desktop/dapi.json";
+    static String inputPath = "/Users/wentaod/Desktop/xtrader/xtrader-50000.json";
+    static String outputPath = "/Users/wentaod/Desktop/xtrader/dapi-50000.json";
     static JSONParser parser = new JSONParser();
 
     static Map<String, Integer> demoMapApp;
@@ -74,18 +74,18 @@ public class Dapi {
     }
 
     static JSONObject transform(JSONObject bidderLog) throws Exception {
-        //JSONArray age = (JSONArray) bidderLog.get("age");
-        //JSONArray gender = (JSONArray) bidderLog.get("gender");
-        JSONArray age = null;
-        String ageStr = (String) bidderLog.get("age");
-        if (ageStr != null && !ageStr.isEmpty()) {
-            age = (JSONArray) parser.parse(ageStr);
-        }
-        JSONArray gender = null;
-        String genderStr = (String) bidderLog.get("gender");
-        if (genderStr != null && !genderStr.isEmpty()) {
-            gender = (JSONArray) parser.parse(genderStr);
-        }
+        JSONArray age = (JSONArray) bidderLog.get("age");
+        JSONArray gender = (JSONArray) bidderLog.get("gender");
+        //JSONArray age = null;
+        //String ageStr = (String) bidderLog.get("age");
+        //if (ageStr != null && !ageStr.isEmpty()) {
+        //    age = (JSONArray) parser.parse(ageStr);
+        //}
+        //JSONArray gender = null;
+        //String genderStr = (String) bidderLog.get("gender");
+        //if (genderStr != null && !genderStr.isEmpty()) {
+        //    gender = (JSONArray) parser.parse(genderStr);
+        //}
 
         if ((age == null || age.isEmpty()) && (gender == null || gender.isEmpty())) {
             return null;

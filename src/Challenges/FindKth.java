@@ -6,15 +6,15 @@ package Challenges;
 public class FindKth {
     static public void main(String args[]) {
         int[] nums = {3, 65, 11, 11, 8, 29, 41, 21, 4, 6, 11, 11};
-        int k = 9;
-        //System.out.println(partition(nums, 0, nums.length - 1));
-        System.out.println(findKth(nums, k));
+        int k = 0;
+        System.out.println("Find " + k + "-th: " + findKth(nums, k));
         for (int x : nums)
             System.out.print(x + ", ");
     }
 
-    static int findKth(int[] nums, int k) {
-        if (nums.length - 1 < k)
+    // return the element which is k-th
+    static public int findKth(int[] nums, int k) {
+        if (k <0 || nums.length - 1 < k)
             return -1;
         return nums[findKth(nums, k, 0, nums.length - 1)];
     }
@@ -43,26 +43,24 @@ public class FindKth {
 
     // partition [i, j] so that pivot is in the correct place, and left elements less than pivot and right larger.
     // return the index of pivot
-    static int partition(int[] nums, int i, int j) {
-        int p = (int)((j - i) * Math.random()) + i;
+    static public int partition(int[] nums, int i, int j) {
+        if (i == j)
+            return i;
+
+        int p = (int)((j - i + 1) * Math.random()) + i;
         int pivot = nums[p];
         swap(nums, p, j);
+        p = j;
 
         while (i < j) {
-            while (i < j && nums[i] < pivot)
+            while (nums[i] < pivot)
                 i ++;
-            if (i == j)
-                break;
-            nums[j --] = nums[i];
-            while (i < j && nums[j] >= pivot) {
+            while (i < j && nums[j] >= pivot)
                 j --;
-            }
-            if (i == j)
-                break;
-            nums[i ++] = nums[j];
+            swap(nums, i, j);
         }
+        swap(nums, i, p);
 
-        nums[i] = pivot;
         return i;
     }
 

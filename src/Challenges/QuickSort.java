@@ -23,15 +23,21 @@ public class QuickSort {
         while(i < j) {
             while(a[i] < pivot)
                 i++;
-            while(a[j] > pivot)
+            while(i < j && a[j] >= pivot)
                 j--;
             if(i < j) {
-                int tmp = a[i];
-                a[i] = a[j];
-                a[j] = tmp;
+                swap(a, i, j);
             }
         }
-        return j;
+        swap(a, i, high);
+        return i;
+    }
+
+    static void swap(int[] a, int i, int j) {
+        int tmp = a[i];
+        a[i] = a[j];
+        a[j] = tmp;
+
     }
 
     static void mergeSort(int[] a) {
@@ -60,9 +66,9 @@ public class QuickSort {
     }
 
     static public void main(String args[]) {
-        int a[] = {311, 5, 11, 71, 8, 2, 19, 4, 16, 11};
-        //quickSort(a);
-        mergeSort(a);
+        int a[] = {3, 65, 11, 11, 8, 29, 41, 21, 4, 6, 11, 11};
+        quickSort(a);
+        //mergeSort(a);
         for(int i=0; i<a.length; i++)
             System.out.println(a[i]);
     }
