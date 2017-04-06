@@ -11,81 +11,110 @@ import java.util.*;
  Minimum window is "BANC".
  * Created by wentaod on 12/2/15.
  */
+
+// Given 2 strings A and B, find the minimum substring in A that contains all the chars in B with best time complexity.
+// e.g., A: "xCxxAxxAxBxCx", B: "ACB", answer: "AxBxC".
+
+// algorithm
+// test cases; two BB
+
+import java.util.*;
+
 public class MinimumWindowSubstring {
-    static public class Solution {
 
-        public String minWindow(String s, String t) {
-            if(s==null || t==null || s.isEmpty() || t.isEmpty())
-                return "";
+    String minSubStringInclude(String input, String pattern) {
+        if (input == null || pattern == null || pattern.isEmpty() || input.isEmpty() || input.length() < pattern.length()) {
+            return null;
+        }
 
-            // Decide pattern in template
-            HashMap<Character, Integer> template = new HashMap<>();
-            for(int i=0; i<t.length(); i++) {
-                char c = t.charAt(i);
-                Integer count = template.get(c);
-                if(count==null)
-                    count = 0;
-                template.put(c, count+1);
+        Map<Character, Integer> freq = statiscsPattern(pattern);
+
+        int p = 0;
+        int q = 0;
+        int fulfilled = 0;
+
+        // initially expand to cover all
+        while (q < input.length()) {
+            Character c = input.charAt(q ++);
+            Integer f = freq.get(c);
+            if (f == null) {
+                continue;
             }
-
-            // Initialize all needed chars counts to 0.
-            HashMap<Character, Integer> pattern = new HashMap<>();
-            for(char c : template.keySet())
-                    pattern.put(c, 0);
-
-            // Window [start, end] is the satisfied window.
-            // When sliding window, make sure count is greater or equal to the template.
-            int start=0, end=0;
-            int minSize = Integer.MAX_VALUE;
-            String minStr = "";
-            boolean satisfied = false;
-            for(;end < s.length(); end++) {
-                // expand window to the right
-                char c = s.charAt(end);
-                Integer cnt = pattern.get(c);
-                if(cnt != null) {
-                    pattern.put(c, cnt + 1);
-                    // we no longer need to check if window satisfied once it's satisfied based on our logic.
-                    if(!satisfied)
-                        satisfied = isSatisfied(template, pattern);
-                    // Now that a new char is counted in, we can try to shrink window.
-                    while(start<=end) {
-                        char x = s.charAt(start);
-                        Integer xnt = pattern.get(x);
-                        if(xnt!=null) {
-                            if(xnt <= template.get(x))
-                                break; // we cannot shrink further.
-                            pattern.put(x, xnt-1);
-                        }
-                        start++;
-                    }
-                    if(satisfied && minSize > end - start + 1) {
-                        minSize = end - start + 1;
-                        minStr = s.substring(start, end+1);
-                    }
+            freq.put(c, ++ f);
+            if (f == 0) {
+                if (++ fulfilled == freq.size()) {
+                    break;
                 }
             }
-
-            return minStr;
         }
 
-        boolean isSatisfied(HashMap<Character, Integer> template, HashMap<Character, Integer> pattern) {
-            for(Map.Entry<Character, Integer> e : template.entrySet()) {
-                if(pattern.get(e.getKey())==null || pattern.get(e.getKey()) < e.getValue()) // no such pattern
-                    return false;
+        // at this point, all pattern chars have frequency 0
+
+        int minP = 0;
+        int minQ = q; // one over window
+        int minSize = q;
+        while (p < input.length()) {
+            // always try shrinking first
+            Character c = input.charAt(p);
+            Integer f = freq.get(c);
+            if (f == null || f > 0) { // we can shrink in either case
+                if (f != null) {
+                    freq.put(c, f - 1);
+                }
+                p ++;
+                int size = q - p;
+                if (size < minSize) {
+                    minP = p;
+                    minQ = q;
+                    minSize = size;
+                }
+
+                continue; // we continue shrinking if we've shrinked this time
             }
-            return true;
+
+            // if q moved to the end, we can still shrink, but if we can no longer shrink, it's done.
+            if (q == input.length()) {
+                break;
+            }
+
+            // If we cannot shink this time, we try expanding
+            while (q < input.length()) {
+                c = input.charAt(q++);
+                f = freq.get(c);
+                if (f != null) {
+                    freq.put(c, f + 1);
+                    break; // we take a needed new char, so we try shrinking next time
+                }
+            }
         }
 
-        public void test() {
-            String s = "ADOBECODEBANC";
-            String t = "ABC";
-            System.out.println(minWindow(s, t));
+        return input.substring(minP, minQ);
+
+    }
+
+    Map<Character, Integer> statiscsPattern(String pattern) {
+        Map<Character, Integer> freq = new HashMap<>();
+        for (Character c : pattern.toCharArray()) {
+            Integer f = freq.get(c);
+            if (f == null) {
+                f = 0;
+            }
+            freq.put(c, f - 1);
         }
+        return freq;
     }
 
     static public void main(String args[]) {
-        Solution sol = new Solution();
-        sol.test();
+        MinimumWindowSubstring sol = new MinimumWindowSubstring();
+        System.out.println(sol.minSubStringInclude("xCxxAxxAxBxCx", "ACB"));
+        System.out.println(sol.minSubStringInclude("", ""));
+        System.out.println(sol.minSubStringInclude("A", "A"));
+        System.out.println(sol.minSubStringInclude("A", "AA"));
+        System.out.println(sol.minSubStringInclude("A", "AB"));
+        System.out.println(sol.minSubStringInclude("AB", "AB"));
+        System.out.println(sol.minSubStringInclude("AB", "B"));
+        System.out.println(sol.minSubStringInclude("AAxBB", "AB"));
+        System.out.println(sol.minSubStringInclude("AAxBA", "AB"));
+        System.out.println(sol.minSubStringInclude("AAxBAAB", "ABA"));
     }
 }
