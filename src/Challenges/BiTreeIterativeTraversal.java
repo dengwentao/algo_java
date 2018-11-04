@@ -71,6 +71,53 @@ public class BiTreeIterativeTraversal {
         }
     }
 
+    static public void inOrder2(TreeNode root) {
+        Stack<TreeNode> s = new Stack<>();
+        if (root != null)
+            s.push(root);
+        while (!s.empty()) {
+            if (root.left != null) {
+                root = root.left;
+                s.push(root);
+            } else {
+                root = s.pop();
+                System.out.print(root.val + ", ");
+                if (root.right != null) {
+                    root = root.right;
+                    s.push(root);
+                }
+            }
+        }
+    }
+
+    static public class InOrderIterator {
+
+        Stack<TreeNode> s;
+
+        public InOrderIterator(TreeNode root) {
+            s = new Stack<>();
+            while (root != null) {
+                s.push(root);
+                root = root.left;
+            }
+        }
+
+        public boolean hasNext() {
+            return !s.empty();
+        }
+
+        public TreeNode next() {
+            TreeNode node = s.pop();
+            TreeNode p = node;
+            p = p.right;
+            while (p != null) {
+                s.push(p);
+                p = p.left;
+            }
+            return node;
+        }
+    }
+
     static public void postOrder(TreeNode root) {
         Stack<TreeNode> children = new Stack<>();
         Stack<TreeNode> parent = new Stack<>();
@@ -117,10 +164,16 @@ public class BiTreeIterativeTraversal {
         TreeNode root = createBST();
         //print(root);
         //preOrder(root);
-        //inOrder(root);
+        //inOrder2(root);
         //postOrder(root);
-        TreeNode root2 = createBST2();
-        mergeBst(root, root2);
+
+        InOrderIterator it = new InOrderIterator(root);
+        while (it.hasNext()) {
+            System.out.print(it.next().val + ", ");
+        }
+
+        //TreeNode root2 = createBST2();
+        //mergeBst(root, root2);
     }
 
 

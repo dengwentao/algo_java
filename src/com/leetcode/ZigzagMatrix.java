@@ -1,4 +1,5 @@
 package com.leetcode;
+import java.util.*;
 
 /**
  * Created by wentaod on 12/16/15.
@@ -77,6 +78,102 @@ public class ZigzagMatrix {
     }
 
 
+    ///////  New Approach ///////
+
+    static public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> result = new ArrayList<>();
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0)
+            return result;
+
+        int rDir[] = {0, 1, 0, -1}; // directions, e.g., when dir=0 row stays while column++.
+        int cDir[] = {1, 0, -1, 0};
+        int r = 0, c = 0, layer = 0, dir = 0; // start at [0, 0] on layer 0, dir = 0
+        while (result.size() < matrix.length * matrix[0].length) {
+            result.add(matrix[r][c]);
+            r += rDir[dir]; // move to the next according to current direction
+            c += cDir[dir];
+            if (!validate(r, c, layer, dir, matrix)) { // if we moved into an invalid state
+                r -= rDir[dir]; // one step back
+                c -= cDir[dir];
+                dir ++; // use the next direction
+                if (dir == 4) {
+                    layer ++; // go to next layer
+                    dir = 0;
+                }
+                r += rDir[dir]; // continue on this correct direction
+                c += cDir[dir];
+            }
+        }
+        return result;
+    }
+
+    // layer is used to calculate validation
+    // when going up we want to avoid going into the start point of this layer
+    static private boolean validate(int r, int c, int layer, int dir, int[][] matrix) {
+        return (dir != 3 && r >= 0 + layer || dir == 3 && r >= 1 + layer)
+                && r < matrix.length - layer && c >= 0 + layer && c < matrix[0].length - layer;
+    }
+
+
+    static public List<Integer> zigzagOrder(int[][] matrix) {
+        List<Integer> result = new ArrayList<>();
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0)
+            return result;
+
+        int rDir[] = {-1, 1};
+        int cDir[] = {1,  -1};
+        int r = 0, c = 0, dir = 0;
+
+        while (result.size() < matrix.length * matrix[0].length) {
+            result.add(matrix[r][c]);
+            r += rDir[dir];
+            c += cDir[dir];
+            if (!(0 <= r && r < matrix.length && 0 <= c && c < matrix[0].length)) {
+                r -= rDir[dir];
+                c -= cDir[dir];
+                if (dir == 0) { // up
+                    if (c == matrix[0].length - 1)
+                        r += 1; // this should be valid, because while loop will terminate upon finishing
+                    if (r == 0)
+                        c += 1;
+                    dir = 1;
+                } else {
+                    if (r == matrix.length - 1)
+                        c += 1;
+                    if (c == 0)
+                        r += 1;
+                    dir = 0;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    static void diagonalOrder(int matrix[][]) {
+
+        // There will be ROW + COL - 1 lines in the output
+        for (int line = 1; line <= (matrix.length + matrix[0].length - 1); line ++) {
+
+            // Get column index of the first element in this line of output.
+            // The index is 0 for first ROW lines and line - ROW for remaining lines
+            int start_col = Math.max(0, line - matrix.length);
+
+            // Get count of elements in this line. The count
+            // of elements is equal to minimum of line number,
+            // COL-start_col and ROW
+            int count = Math.min(line, Math.min((matrix[0].length - start_col), matrix.length));
+
+            // Print elements of this line
+            for (int j = 0; j < count; j++)
+                System.out.print(matrix[Math.min(matrix.length, line) - j - 1]
+                        [start_col + j] + " ");
+
+            // Print elements of next diagonal on next line
+            System.out.println();
+        }
+    }
+
     public static void main(String args[]) {
         int[][] matrix = {  {1, 2, 3, 4},
                             {4, 5, 6, 7},
@@ -85,8 +182,12 @@ public class ZigzagMatrix {
                             {0, 2, 1, 6},
                             {5, 6, 7, 8}};
 
-        zigzag(matrix);
+        for (int x : zigzagOrder(matrix))
+            System.out.print(x + ", ");
         System.out.println();
-        spiral(matrix);
+        diagonalOrder(matrix);
+        System.out.println();
+        for (int x : spiralOrder(matrix))
+            System.out.print(x + ", ");
     }
 }

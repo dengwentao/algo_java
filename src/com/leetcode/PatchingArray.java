@@ -16,15 +16,13 @@ public class PatchingArray {
 
             int count = 0;
             int index = 0;
-            long sum = 0;
             for (long i = 1; i <= n; ) {
                 if (index < nums.length && i >= nums[index]) { // next number is smaller, we can take it
-                    sum += nums[index ++]; // that's the furthest we can reach
-                } else { // we need i, but next number is larger, so we have to add i
+                     i = i + nums[index ++]; // we can reach 2 * nums[index] - 1 after taking nums[index]
+                } else { // we need i, but next number is unreachable, so we have to patch i
                     count ++;
-                    sum += i;
+                    i = 2 * i; // we can reach 2 * i - 1 after patching i
                 }
-                i = sum + 1; // next to try
             }
 
             return count;

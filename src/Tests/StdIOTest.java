@@ -30,4 +30,12 @@ public class StdIOTest {
 
     System.out.println(String.format("%s, your DOB is %d/%d/%d, with %d fingers remaining.", username, month, day, year, fingers));
   }
+
+  private static void readLines() {
+    Scanner scanner = new Scanner(System.in);
+    while (scanner.hasNextLine()) {
+      String line = scanner.nextLine();
+      System.out.println(line);
+    }
+  }
 }

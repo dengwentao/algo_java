@@ -32,20 +32,20 @@ public class ImplementStackUsingQueues {
         }
 
         // Removes the element on top of the stack.
-        public void pop() {
+        public int pop() {
             if(!queue1.isEmpty()) {
                 while(queue1.size() > 1) {
                     top = queue1.poll();
                     queue2.offer(top);
                 }
-                queue1.poll();
+                return queue1.poll();
             }
             else {
                 while(queue2.size() > 1) {
                     top = queue2.poll();
                     queue1.offer(top);
                 }
-                queue2.poll();
+                return queue2.poll();
             }
         }
 

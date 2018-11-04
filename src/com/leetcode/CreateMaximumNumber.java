@@ -70,7 +70,7 @@ public class CreateMaximumNumber {
         }
 
         // Merge two arrays to make the largest.
-        // These two arrays are both sorted from larger to smaller, and none to throw.
+        // These two arrays are both sorted from larger to smaller, and none to throw away.
         int[] merge(int[] a1, int[] a2) {
             int[] result = new int[a1.length + a2.length];
             for(int i=0, j=0, k=0; k<result.length; k++) {
@@ -85,7 +85,7 @@ public class CreateMaximumNumber {
             return result;
         }
 
-        // Compare two equal length arrays, starting from index i and j respectively.
+        // Compare two arrays, starting from index i and j respectively.
         // If finally one ends earlier, consider it smaller.
         int compare(int[] a1, int i, int[] a2, int j) {
             for(; i<a1.length && j<a2.length; i++, j++) {

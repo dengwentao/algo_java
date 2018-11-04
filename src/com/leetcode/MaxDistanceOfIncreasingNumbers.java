@@ -23,7 +23,7 @@ public class MaxDistanceOfIncreasingNumbers {
             }
         }
 
-        public int maximumGap(int[] nums) {
+        public int maximumGap3(int[] nums) {
             if(nums == null || nums.length < 2)
                 return 0;
             Pair[] pairs = new Pair[nums.length];
@@ -36,25 +36,23 @@ public class MaxDistanceOfIncreasingNumbers {
                 indice[i] = pairs[i].index;
 
             int max = 0;
-            int dock = nums.length-1;
-            for(int i=nums.length-2; i>=0; i--) {
-                int gap = indice[dock] - indice[i];
-                if(gap > 0) {
-                    if(max < gap)
-                        max = gap;
-                }
-                else {
-                    dock = i;
+            int minIndex = indice[0];
+            for (int i = 1; i < indice.length; i ++) {
+                int gap = indice[i] - minIndex;
+                if (gap > max) {
+                    max = gap;
+                } else {
+                    minIndex = indice[i];
                 }
             }
-
             return max;
         }
 
         public void test() {
-            int[] arr = {9, 6, 8, 1, 0, 2, 12, 9, 3};
-            System.out.println(maximumGap(arr));
+            int[] arr = {9, 6, 8, 1, 0, 2, 12, 3};
+            System.out.println(maximumGap3(arr));
         }
+
     }
 
     public static void main(String args[]) {

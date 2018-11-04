@@ -18,26 +18,21 @@ public class ProducerConsumer {
         }
 
         public void run() {
-            try {
-                while (true) {
+            while (true)
+                try {
                     synchronized (queue) {
-                        if (queue.size() == size) {
+                        while (queue.size() == size)
                             queue.wait();
-                        } else {
-                            System.out.println("Producing " + counter);
-                            queue.offer(counter++);
-                            queue.notifyAll();
-                        }
+                        System.out.println("Producing " + counter);
+                        queue.offer(counter++);
+                        queue.notifyAll();
                     }
                     Thread.sleep(1000);
                 }
-
-            }
-            catch (Exception ex) {
-                System.out.println(ex.getMessage());
-                System.out.println(ex.getStackTrace());
-            }
-
+                catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                    System.out.println(ex.getStackTrace());
+                }
         }
     }
 
@@ -51,25 +46,20 @@ public class ProducerConsumer {
         }
 
         public void run() {
-            try {
-                while (true) {
+            while (true)
+                try {
                     synchronized (queue) {
-                        if (queue.isEmpty()) {
+                        while (queue.isEmpty())
                             queue.wait();
-                        } else {
-                            System.out.println("Consumed " + queue.poll());
-                            queue.notifyAll();
-                        }
-
+                        System.out.println("Consumed " + queue.poll());
+                        queue.notifyAll();
                     }
                     Thread.sleep(500);
                 }
-            }
-            catch (Exception ex) {
-                System.out.println(ex.getMessage());
-                System.out.println(ex.getStackTrace());
-            }
-
+                catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                    System.out.println(ex.getStackTrace());
+                }
         }
     }
 

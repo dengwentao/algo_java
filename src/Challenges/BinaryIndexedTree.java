@@ -19,7 +19,7 @@ public class BinaryIndexedTree {
         }
 
         // add element in index with difference
-        public void add(int index, int diff) {
+        public void add2(int index, int diff) {
             while(index < BIT_SIZE) {
                 array[index] += diff;
                 index += index & -index;
@@ -27,13 +27,31 @@ public class BinaryIndexedTree {
         }
 
         // get sum of first (index) elements which are in range [0, index]
-        public int sum(int index) {
+        public int sum2(int index) {
             int sum = 0;
             while(index>0) {
                 sum += array[index];
                 index -= index & -index;
             }
             return sum;
+        }
+
+        // add element in index with difference
+        public void add(int index, int diff) {
+            if (index >= BIT_SIZE)
+                return;
+            array[index] += diff;
+            index += index & -index;
+            add(index, diff);
+        }
+
+        // get sum of first (index) elements which are in range [0, index]
+        public int sum(int index) {
+            if (index <= 0)
+                return 0;
+            int v = array[index];
+            index -= index & -index;
+            return v + sum(index);
         }
 
         // Given a sum, find the highest index that satisfies sum(index) <= sum
