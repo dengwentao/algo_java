@@ -22,9 +22,9 @@ import java.util.*;
 
 public class MinimumWindowSubstring {
 
-    String minSubStringInclude(String input, String pattern) {
+    String minSubStringInclude2(String input, String pattern) {
         if (input == null || pattern == null || pattern.isEmpty() || input.isEmpty() || input.length() < pattern.length()) {
-            return null;
+            return "";
         }
 
         Map<Character, Integer> freq = statiscsPattern(pattern);
@@ -48,7 +48,11 @@ public class MinimumWindowSubstring {
             }
         }
 
-        // at this point, all pattern chars have frequency 0
+        // it's possible that there's no such window
+        if (fulfilled != freq.size())
+            return "";
+
+        // at this point, all pattern chars have frequency 0 or positive
 
         int minP = 0;
         int minQ = q; // one over window
@@ -104,8 +108,48 @@ public class MinimumWindowSubstring {
         return freq;
     }
 
+    // This is another solution.
+    public String minSubStringInclude(String s, String t) {
+        if (s == null || t == null)
+            return "";
+
+        int countNeeded = t.length(); // needed count of all chars. countNeeded == 0 is the invariant.
+        int[] dict = new int[128];
+        for (char c : t.toCharArray())
+            dict[c] ++; // frequencies of each char in the pattern
+
+        int minLen = Integer.MAX_VALUE;
+        int startIndex = -1;
+        int right = 0, left = 0;
+        while (right < s.length()) {
+            // Expand the window
+            if (dict[s.charAt(right)] > 0) // if this char is needed to satisfy the invariant
+                countNeeded --;
+            // Count it into frequencies, even though it's not needed to satisfy the invariant.
+            dict[s.charAt(right)] --;
+            right ++; // right always point to one after valid window.
+
+            // Shrink the window only if all needed chars are in. Note that there may be extra chars.
+            while (countNeeded == 0) {
+                if (right - left < minLen) { // each time shrinking, update min window.
+                    startIndex = left;
+                    minLen = right - left;
+                }
+
+                if (dict[s.charAt(left)] == 0) // after throwing this char, invariant is broken.
+                    countNeeded ++;
+                dict[s.charAt(left)] ++; // update frequencies after throwing this char
+                left ++; // throw this char
+            }
+        }
+
+        return startIndex == -1 ? "" : s.substring(startIndex, startIndex + minLen);
+    }
+
     static public void main(String args[]) {
         MinimumWindowSubstring sol = new MinimumWindowSubstring();
+        System.out.println(sol.minSubStringInclude("ADOBECODEBANC", "ABC"));
+/*
         System.out.println(sol.minSubStringInclude("xCxxAxxAxBxCx", "ACB"));
         System.out.println(sol.minSubStringInclude("", ""));
         System.out.println(sol.minSubStringInclude("A", "A"));
@@ -116,5 +160,6 @@ public class MinimumWindowSubstring {
         System.out.println(sol.minSubStringInclude("AAxBB", "AB"));
         System.out.println(sol.minSubStringInclude("AAxBA", "AB"));
         System.out.println(sol.minSubStringInclude("AAxBAAB", "ABA"));
+*/
     }
 }
