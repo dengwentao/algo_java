@@ -1,7 +1,4 @@
 package com.leetcode;
-import com.sun.prism.shader.AlphaOne_Color_Loader;
-
-import java.util.*;
 
 /**
  * Create Maximum Number
